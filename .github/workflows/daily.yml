@@ -1,0 +1,24 @@
+name: Daily Contribution
+
+on:
+  schedule:
+    - cron: "0 */5 * * *" # runs 5 times a day
+  workflow_dispatch:
+
+jobs:
+  commit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Update log
+        run: |
+          echo "Updated on $(date)" >> daily-log.md
+
+      - name: Commit changes
+        run: |
+          git config --global user.name "Shreyash Mane"
+          git config --global user.email "your-email@example.com"
+          git add .
+          git commit -m "chore: daily dev log update" || echo "No changes"
+          git push
