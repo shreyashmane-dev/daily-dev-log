@@ -1,0 +1,30 @@
+name: Daily Dev Log
+
+on:
+  schedule:
+    - cron: "30 0 * * *" # runs daily (UTC)
+  workflow_dispatch:
+
+jobs:
+  log:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Update daily log
+        run: |
+          DATE=$(date +'%Y-%m-%d')
+          FILE="logs/$DATE.md"
+          mkdir -p logs
+          echo "# 📅 $DATE" > $FILE
+          echo "- Automated daily log update" >> $FILE
+          echo "- Repo maintenance check" >> $FILE
+
+      - name: Commit & push
+        run: |
+          git config user.name "Shreyash Mane"
+          git config user.email "anosvoldigoadw1@gamil.com"
+          git add .
+          git commit -m "chore: daily dev log update" || echo "No changes"
+          git push
